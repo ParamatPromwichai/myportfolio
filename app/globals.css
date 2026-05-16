@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* กำหนดคู่สีสำหรับ โหมดสว่าง (Default) และโหมดมืด (.dark) ให้ Tailwind v4 รู้จัก */
+@theme {
+  --color-pv-bg: #f8fafc;       /* สีพื้นหลังหลัก */
+  --color-pv-card: #ffffff;     /* สีพื้นหลังการ์ด/กล่องข้อความ */
+  --color-pv-title: #0f172a;    /* สีตัวอักษรหัวข้อหลัก */
+  --color-pv-text: #475569;     /* สีตัวอักษรเนื้อหา */
+  --color-pv-border: #e2e8f0;   /* สีเส้นขอบ */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* เมื่อดึงเชือกโคมไฟ คลาส .dark จะทำงาน และเปลี่ยนค่าสีตัวแปรทันที */
+.dark {
+  --color-pv-bg: #0f172a;
+  --color-pv-card: #1e293b;
+  --color-pv-title: #f8fafc;
+  --color-pv-text: #94a3b8;
+  --color-pv-border: #334155;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* --- ลูกเล่นเอฟเฟกต์และอนิเมชันโคมไฟ --- */
+@keyframes pendulum {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(25deg); }
+  40% { transform: rotate(-18deg); }
+  60% { transform: rotate(10deg); }
+  80% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-swing {
+  animation: pendulum 1.2s ease-in-out forwards;
+  transform-origin: top center;
+}
+
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(15px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+.animate-reveal { animation: fadeIn 0.6s ease-out forwards; }
+
+.bg-grid { 
+  background-image: radial-gradient(#e2e8f0 1px, transparent 1px); 
+  background-size: 30px 30px; 
+}
+.dark .bg-grid { 
+  background-image: radial-gradient(#1e293b 1px, transparent 1px); 
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
