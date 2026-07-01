@@ -121,12 +121,16 @@ export default function Portfolio() {
       window.addEventListener('mouseup', handleDragEnd);
       window.addEventListener('touchmove', handleDragMove);
       window.addEventListener('touchend', handleDragEnd);
+      document.body.style.userSelect = 'none';
+      document.body.style.webkitUserSelect = 'none';
     }
     return () => {
       window.removeEventListener('mousemove', handleDragMove);
       window.removeEventListener('mouseup', handleDragEnd);
       window.removeEventListener('touchmove', handleDragMove);
       window.removeEventListener('touchend', handleDragEnd);
+      document.body.style.userSelect = '';
+      document.body.style.webkitUserSelect = '';
     };
   }, [isDragging, handleDragMove, handleDragEnd]);
 
@@ -228,7 +232,7 @@ export default function Portfolio() {
         <div className={`fixed top-0 right-6 md:right-16 z-[101] flex flex-col items-center ${isSwinging ? 'animate-swing' : ''}`} style={{ transform: isDragging ? `translateY(${pullDistance * 0.2}px)` : 'translateY(0)', transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
           <div className="w-6 h-3 bg-slate-800 dark:bg-slate-700 rounded-b-md shadow-md border border-t-0 border-slate-700 dark:border-slate-600"></div>
           <div className="w-0.5 bg-slate-400 dark:bg-slate-500 origin-top shadow-sm" style={{ height: isDragging ? `${70 + pullDistance}px` : '70px', transition: isDragging ? 'none' : 'height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}></div>
-          <div onMouseDown={handleDragStart} onTouchStart={handleDragStart} className={`w-9 h-9 -mt-1 rounded-full cursor-grab active:cursor-grabbing border-4 shadow-lg flex items-center justify-center text-[9px] font-black transition-all duration-300 ${isDarkMode ? 'bg-yellow-400 border-white text-slate-900 shadow-[0_0_20px_rgba(250,204,21,0.8)]' : 'bg-indigo-600 border-indigo-100 text-white hover:bg-indigo-500'}`}>
+          <div onMouseDown={handleDragStart} onTouchStart={handleDragStart} className={`w-9 h-9 -mt-1 rounded-full cursor-grab active:cursor-grabbing border-4 shadow-lg flex items-center justify-center text-[9px] font-black select-none touch-none transition-all duration-300 ${isDarkMode ? 'bg-yellow-400 border-white text-slate-900 shadow-[0_0_20px_rgba(250,204,21,0.8)]' : 'bg-indigo-600 border-indigo-100 text-white hover:bg-indigo-500'}`}>
             {isDarkMode ? 'ON' : 'OFF'}
           </div>
         </div>
