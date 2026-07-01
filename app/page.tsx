@@ -13,7 +13,14 @@ export default function Portfolio() {
   const [pullDistance, setPullDistance] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isSwinging, setIsSwinging] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(true);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && !sessionStorage.getItem("tutorialSeen")) {
+      setShowTutorial(true);
+      sessionStorage.setItem("tutorialSeen", "true");
+    }
+  }, []);
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [typedText, setTypedText] = useState("");
@@ -296,7 +303,12 @@ export default function Portfolio() {
             </div>
             <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 order-1 md:order-2 reveal-hidden reveal-visible" style={{ animation: "float 4s ease-in-out infinite" }}>
               <div className="absolute inset-0 bg-indigo-500 rounded-[2.5rem] rotate-6 scale-105 opacity-10 animate-pulse"></div>
-              <img src="/image/myprofile.jpg" alt="Paramat" className="relative w-full h-full object-cover rounded-[2.5rem] shadow-2xl border-4 border-pv-card z-10 cursor-zoom-in hover:scale-[1.01] transition-transform" onClick={() => setSelectedImage("/image/myprofile.jpg")} />
+              <div className="relative w-full h-full group z-10 cursor-zoom-in" onClick={() => setSelectedImage("/image/myprofile.jpg")}>
+                <img src="/image/myprofile.jpg" alt="Paramat" className="w-full h-full object-cover rounded-[2.5rem] shadow-2xl border-4 border-pv-card group-hover:scale-[1.02] transition-transform duration-300" />
+                <div className="absolute inset-0 bg-indigo-900/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-[2.5rem] flex items-center justify-center pointer-events-none z-20">
+                  <span className="bg-white/90 text-indigo-900 font-bold px-4 py-2 rounded-full backdrop-blur-sm text-sm shadow-lg">🔍 ดูรูปใหญ่</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -344,10 +356,13 @@ export default function Portfolio() {
                   <div className="p-6 flex flex-col flex-grow">
                     <h3 className="text-lg font-black text-pv-title mb-2 group-hover:text-indigo-600 transition-colors">{p.title}</h3>
                     <p className="text-xs md:text-sm text-pv-text mb-4 flex-grow leading-relaxed line-clamp-2">{p.description}</p>
-                    <div className="flex flex-wrap gap-1.5 mt-auto">
+                    <div className="flex flex-wrap gap-1.5 mb-5">
                       {p.techStack.map((t, i) => (
                         <span key={i} className="text-[10px] px-2.5 py-0.5 bg-pv-bg text-indigo-600 dark:text-indigo-400 font-bold rounded-md border border-pv-border">{t}</span>
                       ))}
+                    </div>
+                    <div className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 dark:text-indigo-400 group-hover:gap-2 transition-all">
+                      ดูรายละเอียดโปรเจกต์ <span>➔</span>
                     </div>
                   </div>
                 </Link>
@@ -364,14 +379,17 @@ export default function Portfolio() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
               {certificates.map((cert, idx) => (
-                <div key={idx} ref={(el) => { tiltCardsRef.current[projects.length + idx] = el; }} className="group bg-pv-bg rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-pv-border transition-all duration-300 transform-gpu will-change-transform">
-                  <div className="relative h-44 md:h-52 overflow-hidden bg-slate-200 cursor-zoom-in" onClick={() => setSelectedImage(cert.image)}>
+                <div key={idx} ref={(el) => { tiltCardsRef.current[projects.length + idx] = el; }} className="group bg-pv-bg rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-pv-border transition-all duration-300 transform-gpu will-change-transform cursor-pointer flex flex-col" onClick={() => setSelectedImage(cert.image)}>
+                  <div className="relative h-44 md:h-52 overflow-hidden bg-slate-200">
                     <img src={cert.image} alt={cert.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-indigo-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs font-bold text-white">🔍 คลิกเพื่อขยายเกียรติบัตร</div>
                   </div>
-                  <div className="p-5 text-center">
+                  <div className="p-5 flex flex-col items-center justify-center flex-grow text-center">
                     <h3 className="text-sm md:text-base font-black text-pv-title mb-1.5">{cert.title}</h3>
-                    <p className="text-xs text-indigo-600 dark:text-indigo-400 font-bold">{cert.issuer} • ปี {cert.date}</p>
+                    <p className="text-xs text-indigo-600 dark:text-indigo-400 font-bold mb-3">{cert.issuer} • ปี {cert.date}</p>
+                    <div className="mt-auto text-[11px] font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 group-hover:text-indigo-600 transition-colors">
+                      🔍 ดูรูปขยาย
+                    </div>
                   </div>
                 </div>
               ))}
@@ -387,6 +405,12 @@ export default function Portfolio() {
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
               <a href="mailto:paramat2020fam@gmail.com" onClick={addRipple} className="relative overflow-hidden flex items-center gap-2.5 px-6 py-3.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 text-sm w-full sm:w-auto justify-center">📧 paramat2020fam@gmail.com</a>
               <a href="tel:0658764737" onClick={addRipple} className="relative overflow-hidden flex items-center gap-2.5 px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition-all text-sm w-full sm:w-auto justify-center">📞 065-876-4737</a>
+              <a href="https://github.com/ParamatPromwichai" target="_blank" rel="noopener noreferrer" onClick={addRipple} className="relative overflow-hidden flex items-center gap-2.5 px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition-all text-sm w-full sm:w-auto justify-center">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                </svg>
+                GitHub
+              </a>
             </div>
             <div className="border-t border-slate-900 pt-8 text-xs md:text-sm text-slate-500 flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-center md:text-left"><p className="text-slate-400 font-bold">ปรมัตถ์ พรหมวิชัย (Paramat Promwichai)</p><p className="text-xs mt-1">110 ม.1 ต.ค้อเขียว อ.วาริชภูมิ จ.สกลนคร 47150</p></div>

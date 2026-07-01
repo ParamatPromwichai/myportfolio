@@ -1,22 +1,12 @@
 // app/projects/[id]/page.tsx
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { projects } from "@/lib/data";
 
 export default function ProjectDetail({ params }: { params: Promise<{ id: string }> }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [pullDistance, setPullDistance] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isSwinging, setIsSwinging] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(true);
-
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [confettiPieces, setConfettiPieces] = useState<{ id: number; color: string; left: number; delay: number }[]>([]);
-  const confettiId = useRef(0);
-  const dragStartY = useRef(0);
   
   // แกะค่า params สำหรับ Next.js 15
   const resolvedParams = React.use(params);
@@ -28,63 +18,12 @@ export default function ProjectDetail({ params }: { params: Promise<{ id: string
     return () => window.removeEventListener("mousemove", move);
   }, []);
 
-  const triggerConfetti = useCallback(() => {
-    const colors = ["#6366f1", "#facc15", "#f43f5e", "#22c55e", "#3b82f6", "#ec4899"];
-    const pieces = Array.from({ length: 30 }).map((_, i) => ({
-      id: confettiId.current++, color: colors[Math.floor(Math.random() * colors.length)], left: Math.random() * 100, delay: Math.random() * 0.3,
-    }));
-    setConfettiPieces(pieces);
-    setTimeout(() => setConfettiPieces([]), 1500);
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    setIsDarkMode((prev) => !prev);
-    setIsSwinging(true);
-    triggerConfetti();
-    setTimeout(() => setIsSwinging(false), 1200);
-  }, [triggerConfetti]);
-
-  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
-    if (showTutorial) setShowTutorial(false);
-    if (isSwinging) return;
-    setIsDragging(true);
-    dragStartY.current = 'touches' in e ? e.touches[0].clientY : e.clientY;
-  };
-
-  const handleDragMove = useCallback((e: MouseEvent | TouchEvent) => {
-    if (!isDragging) return;
-    const diff = ('touches' in e ? e.touches[0].clientY : e.clientY) - dragStartY.current;
-    if (diff > 0) setPullDistance(Math.min(diff, 50));
-  }, [isDragging]);
-
-  const handleDragEnd = useCallback(() => {
-    if (!isDragging) return;
-    if (pullDistance > 35) toggleTheme();
-    setIsDragging(false);
-    setPullDistance(0);
-  }, [isDragging, pullDistance, toggleTheme]);
-
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('mousemove', handleDragMove);
-      window.addEventListener('mouseup', handleDragEnd);
-      window.addEventListener('touchmove', handleDragMove);
-      window.addEventListener('touchend', handleDragEnd);
-    }
-    return () => {
-      window.removeEventListener('mousemove', handleDragMove);
-      window.removeEventListener('mouseup', handleDragEnd);
-      window.removeEventListener('touchmove', handleDragMove);
-      window.removeEventListener('touchend', handleDragEnd);
-    };
-  }, [isDragging, handleDragMove, handleDragEnd]);
-
   if (!project) {
     return <div className="min-h-screen flex items-center justify-center text-xl font-bold">ไม่พบข้อมูลโปรเจกต์ 😢 <Link href="/" className="text-indigo-600 ml-2 hover:underline">กลับหน้าหลัก</Link></div>;
   }
 
   return (
-    <div className={isDarkMode ? "dark" : ""}>
+    <div>
       <style>{`
         @keyframes swing { 0% { transform: rotate(0deg); } 15% { transform: rotate(12deg); } 30% { transform: rotate(-10deg); } 45% { transform: rotate(8deg); } 60% { transform: rotate(-6deg); } 75% { transform: rotate(3deg); } 100% { transform: rotate(0deg); } }
         @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
@@ -98,35 +37,6 @@ export default function ProjectDetail({ params }: { params: Promise<{ id: string
 
       <div className="min-h-screen bg-pv-bg text-pv-text transition-colors duration-500 overflow-x-hidden relative">
         <div className="fixed pointer-events-none z-[1000] hidden md:block" style={{ left: mousePos.x - 20, top: mousePos.y - 20, width: 40, height: 40, borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%)", transition: "left 0.1s ease, top 0.1s ease", filter: "blur(4px)" }}></div>
-        
-        {confettiPieces.map((p) => (
-          <div key={p.id} className="fixed top-0 z-[200] pointer-events-none" style={{ left: `${p.left}%`, width: 10, height: 10, backgroundColor: p.color, borderRadius: 2, animation: `confetti-fall 1.5s ${p.delay}s linear forwards` }}></div>
-        ))}
-
-        {/* --- โคมไฟ --- */}
-        <div className={`fixed top-0 right-6 md:right-16 z-[101] flex flex-col items-center ${isSwinging ? 'animate-swing' : ''}`} style={{ transform: isDragging ? `translateY(${pullDistance * 0.2}px)` : 'translateY(0)', transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
-          <div className="w-6 h-3 bg-slate-800 dark:bg-slate-700 rounded-b-md shadow-md border border-t-0 border-slate-700 dark:border-slate-600"></div>
-          <div className="w-0.5 bg-slate-400 dark:bg-slate-500 origin-top shadow-sm" style={{ height: isDragging ? `${70 + pullDistance}px` : '70px', transition: isDragging ? 'none' : 'height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}></div>
-          <div onMouseDown={handleDragStart} onTouchStart={handleDragStart} className={`w-9 h-9 -mt-1 rounded-full cursor-grab active:cursor-grabbing border-4 shadow-lg flex items-center justify-center text-[9px] font-black transition-all duration-300 ${isDarkMode ? 'bg-yellow-400 border-white text-slate-900 shadow-[0_0_20px_rgba(250,204,21,0.8)]' : 'bg-indigo-600 border-indigo-100 text-white hover:bg-indigo-500'}`}>
-            {isDarkMode ? 'ON' : 'OFF'}
-          </div>
-        </div>
-
-        {/* --- Tooltip Popup --- */}
-        {showTutorial && (
-          <div className="fixed top-28 right-4 md:right-12 z-[100] w-64 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.6)] border border-slate-200 dark:border-slate-700 animate-float-gentle">
-            <div className="absolute -top-2 right-4 md:right-6 w-4 h-4 bg-white dark:bg-slate-800 border-l border-t border-slate-200 dark:border-slate-700 rotate-45 transform"></div>
-            <div className="relative z-10">
-              <div className="flex justify-between items-start mb-1">
-                <h3 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-1.5"><span className="text-lg">💡</span> ลูกเล่นใหม่!</h3>
-                <button onClick={() => setShowTutorial(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                ลอง<span className="text-indigo-600 dark:text-indigo-400 font-bold mx-1">ลากดึงสวิตช์โคมไฟ</span>ด้านบนลงมา เพื่อสลับใช้งาน Dark Mode ดูก่อนสิครับ!
-              </p>
-            </div>
-          </div>
-        )}
 
         {/* --- Modal ซูมรูป --- */}
         {selectedImage && (
@@ -159,6 +69,15 @@ export default function ProjectDetail({ params }: { params: Promise<{ id: string
             ))}
           </div>
 
+          {(project as any).websiteUrl && (
+            <div className="mb-10">
+              <a href={(project as any).websiteUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black transition-all shadow-lg shadow-indigo-500/30 text-lg group">
+                <span>🌐</span> เข้าชมเว็บไซต์ 
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </a>
+            </div>
+          )}
+
           <div className="relative h-[300px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl mb-12 border-4 border-pv-card cursor-zoom-in group" onClick={() => setSelectedImage(project.image)}>
             <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-indigo-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -170,6 +89,36 @@ export default function ProjectDetail({ params }: { params: Promise<{ id: string
             <h2 className="text-2xl font-black text-pv-title mb-6 flex items-center gap-3"><span className="text-indigo-500">📝</span> รายละเอียดการพัฒนา</h2>
             <p className="text-pv-text leading-loose text-base md:text-lg">{project.fullDescription}</p>
           </div>
+
+          {(project as any).video && (
+            <div className="mb-16">
+              <h2 className="text-2xl font-black text-pv-title mb-6 flex items-center gap-3"><span className="text-indigo-500">🎥</span> วิดีโอสาธิต</h2>
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-pv-card bg-black flex justify-center w-full">
+                {String((project as any).video).includes('youtube.com') || String((project as any).video).includes('youtu.be') ? (
+                  <iframe 
+                    src={(() => {
+                      const url = (project as any).video;
+                      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                      const match = url.match(regExp);
+                      return match && match[2].length === 11 ? `https://www.youtube.com/embed/${match[2]}` : url;
+                    })()}
+                    title="YouTube video player" 
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen
+                    className="w-full aspect-video"
+                  ></iframe>
+                ) : (
+                  <video 
+                    src={(project as any).video} 
+                    controls 
+                    className="w-full max-h-[600px] object-contain"
+                    poster={project.image}
+                  />
+                )}
+              </div>
+            </div>
+          )}
 
           {project.additionalImages && project.additionalImages.length > 0 && (
             <div>
