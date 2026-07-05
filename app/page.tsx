@@ -405,7 +405,7 @@ export default function Portfolio() {
           <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-indigo-600 rounded-full mix-blend-screen filter blur-[120px] opacity-30 pointer-events-none"></div>
           <div className="max-w-4xl mx-auto px-4 text-center relative z-10 reveal-hidden" ref={(el) => { revealRefs.current[skills.length + 3] = el; }}>
             <h2 className="text-2xl md:text-4xl font-black mb-4">สนใจร่วมงานหรือสอบถามข้อมูลเพิ่มเติม</h2>
-            <p className="text-slate-400 text-sm md:text-base mb-10 max-w-xl mx-auto leading-relaxed">หากบริษัทของท่านในพื้นที่จังหวัดสกลนคร ขอนแก่น หรือพื้นที่อื่นๆ กำลังมองหานักศึกษาฝึกงานตำแหน่ง Software Developer มั่นใจได้เลยว่าผมพร้อมทุ่มเทลุยงานเต็มที่ครับ!</p>
+            <p className="text-slate-400 text-sm md:text-base mb-10 max-w-xl mx-auto leading-relaxed">หากบริษัทของท่าน กำลังมองหานักศึกษาฝึกงานตำแหน่ง Software Developer มั่นใจได้เลยว่าผมพร้อมทุ่มเทลุยงานเต็มที่ครับ!</p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
               <a href="mailto:paramat2020fam@gmail.com" onClick={addRipple} className="relative overflow-hidden flex items-center gap-2.5 px-6 py-3.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 text-sm w-full sm:w-auto justify-center">📧 paramat2020fam@gmail.com</a>
               <a href="tel:0658764737" onClick={addRipple} className="relative overflow-hidden flex items-center gap-2.5 px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition-all text-sm w-full sm:w-auto justify-center">📞 065-876-4737</a>
