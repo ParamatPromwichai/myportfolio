@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const notoSansThai = Noto_Sans_Thai({ subsets: ["thai"], variable: "--font-noto-sans-thai" });
 
 export const metadata: Metadata = {
   title: "My Portfolio | Paramat Promwichai",
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     // เพิ่ม scroll-smooth ที่แท็ก html
     <html lang="th" className="scroll-smooth"> 
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.variable} ${notoSansThai.variable} font-sans`}>{children}</body>
     </html>
   );
 }
