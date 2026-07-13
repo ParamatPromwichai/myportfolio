@@ -24,7 +24,7 @@ export default function Portfolio() {
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [typedText, setTypedText] = useState("");
-  const fullText = "Full-Stack Developer";
+  const fullText = "Software Engineer";
   const [confettiPieces, setConfettiPieces] = useState<{ id: number; color: string; left: number; delay: number }[]>([]);
   const confettiId = useRef(0);
 
@@ -54,7 +54,7 @@ export default function Portfolio() {
       setTypedText(fullText.slice(0, i + 1));
       i++;
       if (i >= fullText.length) clearInterval(interval);
-    }, 100);
+    }, 150);
     return () => clearInterval(interval);
   }, []);
 
@@ -290,9 +290,13 @@ export default function Portfolio() {
           <div className="relative z-10 max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start order-2 md:order-1 reveal-hidden reveal-visible">
               <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900 text-indigo-600 dark:text-indigo-400 font-bold text-xs md:text-sm shadow-sm hover:scale-105 transition-transform">👋 สวัสดีครับ ผมชื่อ ปรมัตถ์ พรหมวิชัย (แฟ้ม)</div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-pv-title tracking-tight mb-4 leading-none">
-                <span className="block">Full-Stack</span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-indigo-400 dark:to-blue-400 block mt-2 text-4xl md:text-5xl lg:text-6xl">{typedText}<span className="animate-pulse">|</span></span>
+              <h1 className="font-black tracking-tight mb-6 leading-[1.2] w-full">
+                <span className="block whitespace-nowrap text-[8.5vw] sm:text-[6.5vw] md:text-6xl lg:text-[4.2rem] xl:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-pv-title via-indigo-500 to-pv-title pb-1 md:pb-2">
+                  Paramat Promwichai
+                </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-indigo-400 dark:to-blue-400 block mt-1 text-[6vw] sm:text-[4.5vw] md:text-5xl lg:text-6xl">
+                  {typedText}<span className="inline-block w-[4px] md:w-[6px] h-[0.9em] bg-indigo-500 ml-2 rounded-sm animate-cursor-blink translate-y-[2px] md:translate-y-[4px]"></span>
+                </span>
               </h1>
               <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-8 text-xs md:text-sm font-bold">
                 <div className="bg-pv-card px-4 py-2 rounded-xl shadow-sm border border-pv-border hover:border-indigo-400 transition-colors">🎓 ม.เกษตรศาสตร์ (ปี 4)</div>
