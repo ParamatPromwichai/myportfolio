@@ -69,5 +69,5 @@ export const certificates = [
   { title: "Introduction to Python", issuer: "Datacamp", date: "2025", image: "/image/Pythondatacamp.jpg" },
   { title: "Intermediate Python", issuer: "Datacamp", date: "2025", image: "/image/pythonmediumdatacamp.jpg" },
   { title: "Understanding Data Visualization", issuer: "Datacamp", date: "2025", image: "/image/visualizationdatacamp.jpg" },
-  { title: "Overview of Data Visualization", issuer: "Cursera", date: "2566", image: "/image/Coursera visualization.jpg" }
+  { title: "Overview of Data Visualization", issuer: "Cursera", date: "2025", image: "/image/Coursera visualization.jpg" }
 ];
