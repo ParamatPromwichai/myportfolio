@@ -2,9 +2,10 @@
 export const skills = [
   { category: "Frontend", items: ["React", "Next.js", "JavaScript", "TypeScript", "Tailwind CSS", "HTML5", "CSS3"] },
   { category: "Backend & API", items: ["Node.js", "PHP", "Python"] },
-  { category: "Databases", items: ["MySQL", "PostgreSQL", "SQL Server", "TiDB"] },
-  { category: "Cloud & Tools", items: ["Git", "GitHub", "Vercel", "Railway", "Render", "VS Code", "Visual Studio", "DBeaver", "XAMPP"] },
-  { category: "Additional Skills", items: ["Flutter", "Dart", "C#", "Arduino (ESP32/8266)", "Pandas", "Matplotlib"] },
+  { category: "Databases", items: ["MySQL", "PostgreSQL", "TiDB", "Supabase", "MongoDB"] },
+  { category: "Cloud & DevOps", items: ["Git", "GitHub", "Vercel", "Railway", "Render", "VPS Deployment"] },
+  { category: "Tools", items: ["VS Code", "Visual Studio", "DBeaver", "XAMPP", "Arduino IO Simulator", "Postman", "Antigravity"] },
+  { category: "Additional Skills", items: ["Flutter", "Dart", "C#", "Arduino (ESP32/8266)", "IoT Sensors", "AI Chatbot Integration", "Pandas", "Matplotlib"] },
 ];
 
 export const projects = [
